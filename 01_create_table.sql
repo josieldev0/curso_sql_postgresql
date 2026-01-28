@@ -1,6 +1,9 @@
+-- =====================================================
+-- CREATE TABLE	
+-- =====================================================
 create table cliente (
 	idcliente integer not null, -- inteiro
-	nome varchar(50) not null, -- ate 50 caracteres
+	nome varchar(50) not null, -- até 50 caracteres
 	cpf char(11), -- obrigatoriamente 11 caracteres
 	rg varchar(15),
 	data_nascimento date,
@@ -18,4 +21,4 @@ create table cliente (
 	-- primary key
 	constraint pk_cln_idcliente primary key (idcliente)
 	 
-)
+);
