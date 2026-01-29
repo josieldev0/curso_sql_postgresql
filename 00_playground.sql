@@ -164,3 +164,61 @@ update cliente set nome = 'Adriano', genero = 'M', numero = '241' where idclient
 insert into cliente (idcliente, nome) values(16, 'João');
 
 delete from cliente where idcliente = 16;
+
+-- =====================================================
+-- EXERCÍCIOS UPDATE e DELETE
+-- =====================================================
+-- 1.	Insira os dados abaixo na tabela de clientes
+
+-- IdCliente	Nome	CPF	RG	Data_Nascimento	Sexo	Profissão	Nacionalidade	Logradouro	Numero	Complemento	Bairro	Município	UF
+-- 16	Maicon	12349596421	1234	10/10/1965	F		Empresário														Florianópolis	PR
+-- 17	Getúlio				4631				F		Estudante	Brasileira		Rua Central	343		Apartamento	Centro	Curitiba	SC
+-- 18	Sandra									M		Professor	Italiana					12		Bloco A		
+
+insert into cliente (idcliente, nome, cpf, rg, data_nascimento, genero, profissao, municipio, uf )
+values (16, 'Maicon', '12349596421', '1234', '1965-10-10', 'F', 'Empresário', 'Florianópolis', 'PR' );
+
+insert into cliente (idcliente, nome, rg, genero, profissao, nacionalidade, logradouro, numero, complemento, bairro, municipio, uf )
+values (17, 'Getúlio', '4631', 'F', 'Estudante', 'Brasileira', 'Rua Central', '343', 'Apartamento', 'Centro', 'Curitiba', 'SC' );
+
+insert into cliente (idcliente, nome, genero, profissao, nacionalidade, numero, complemento )
+values (18, 'Sandra', 'M', 'Professor', 'Italiana', '12', 'Bloco A' );
+
+
+-- 2.	Altere os dados do cliente Maicon
+
+	-- a.	O CPF para 45390569432
+update cliente set cpf = '45390569432' where idcliente = 16;
+
+	-- b.	O sexo para M
+update cliente set genero = 'M' where idcliente = 16;
+
+	-- c.	A nacionalidade para Brasileira
+update cliente set nacionalidade = 'Brasileira' where idcliente = 16;
+
+	-- d.	O UF para SC
+update cliente set uf = 'SC' where idcliente = 16;
+
+
+-- 3.	Altere os dados do cliente Getúlio
+
+	-- a.	A data de nascimento para 01/04/1978
+update cliente set data_nascimento = '1978-04-01' where idcliente = 17;
+
+	-- b.	O sexo para M
+updtate cliente set genero = 'M' where idcliente = 17;
+
+
+-- 4.	Altere os dados da cliente Sandra
+	-- a.	O sexo para F
+	-- b.	A profissão para Professora
+	-- c.	O número para 123
+update cliente set genero = 'F', profissao = 'Professora', numero = '123' where idcliente = 18;
+
+
+-- 5.	Apague o cliente Maicon
+delete from cliente where idcliente = 16;
+
+
+-- 6.	Apague a cliente Sandra
+delete from cliente where idcliente = 18;
