@@ -22,3 +22,58 @@ create table cliente (
 	constraint pk_cln_idcliente primary key (idcliente)
 	 
 );
+
+-- =====================================================
+-- CREATE TABLE
+-- =====================================================
+create table profissao (
+	idprofissao integer not null,
+	nome varchar(30) not null,
+
+	constraint pk_prf_idprofissao primary key (idprofissao),
+	constraint un_prf_nome unique (nome)
+);
+
+create table nacionalidade(
+	idnacionalidade integer not null,
+	nome varchar(30) not null,
+
+	constraint pk_ncn_idnacionalidade primary key (idnacionalidade),
+	constraint un_ncn_nome unique (nome)
+);
+
+create table complemento(
+	idcomplemento integer not null,
+	nome varchar(30) not null,
+
+	constraint pk_cpl_idcomplemento primary key (idcomplemento),
+	constraint un_cpl_nome unique (nome)
+);
+
+create table bairro(
+	idbairro integer not null,
+	nome varchar(30) not null,
+
+	constraint pk_brr_idbairro primary key (idbairro),
+	constraint un_brr_nome unique (nome)
+);
+
+create table uf (
+	iduf integer not null,
+	nome varchar(30) not null,
+	sigla char(2) not null,
+
+	constraint pk_ufd_idunidade_federacao primary key (iduf), 
+	constraint pk_ufd_nome unique (nome), 
+	constraint pk_ufd_sigla unique (sigla)
+)
+
+create table municipio(
+	idmunicipio integer not null,
+	nome varchar(30) not null,
+	iduf integer not null,
+
+	constraint pk_mnc_idmunicipio primary key (idmunicipio),
+	constraint un_mnc_nome unique (nome),
+	constraint fk_mnc_iduf foreign key (iduf) references uf (iduf)
+);
