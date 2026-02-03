@@ -383,3 +383,163 @@ update cliente set idmunicipio = 6 where idcliente = 7;
 update cliente set idmunicipio = 7 where idcliente = 8;
 update cliente set idmunicipio = 8 where idcliente = 9;
 update cliente set idmunicipio = 9 where idcliente in (14, 15);
+
+-- =====================================================
+-- EXERCÍCIOS CREATE TABLE	e INSERT
+-- =====================================================
+create table fornecedor (
+	idfornecedor integer not null,
+	nome varchar(50) not null,
+	
+	constraint pk_frn_idforncedor primary key (idfornecedor),
+	constraint un_frn_nome unique (nome)
+);
+
+create table vendedor (
+	idvendedor integer not null,
+	nome varchar(50) not null,
+	
+	constraint pk_vnd_idvendedor primary key (idvendedor),
+	constraint un_vnd_nome unique (nome)
+);
+
+create table transportadora (
+	idtransportadora integer not null,
+	idmunicipio integer,
+	nome varchar(50) not null, 
+	logradouro varchar(50),
+	numero varchar(10),
+	
+	constraint pk_trn_idtransportadora primary key (idtransportadora),
+	constraint fk_trn_idmunicipio foreign key (idmunicipio) references municipio (idmunicipio),
+	constraint un_trn_nome unique (nome)
+);
+
+create table produto (
+	idproduto integer not null,
+	idfornecedor integer not null,
+	nome varchar(50) not null,
+	valor float not null,
+	
+	constraint pk_prd_idproduto primary key (idproduto),
+	constraint fk_prd_idfornecedor foreign key (idfornecedor) references fornecedor (idfornecedor)
+);
+
+insert into vendedor (idvendedor, nome) values (1, 'André');
+insert into vendedor (idvendedor, nome) values (2, 'Alisson');
+insert into vendedor (idvendedor, nome) values (3, 'José');
+insert into vendedor (idvendedor, nome) values (4, 'Ailton');
+insert into vendedor (idvendedor, nome) values (5, 'Maria');
+insert into vendedor (idvendedor, nome) values (6, 'Suelem');
+insert into vendedor (idvendedor, nome) values (7, 'Aline');
+insert into vendedor (idvendedor, nome) values (8, 'Silvana');
+
+insert into fornecedor (idfornecedor, nome) values (1, 'Cap. Computadores');
+insert into fornecedor (idfornecedor, nome) values (2, 'AA. Computadores');
+insert into fornecedor (idfornecedor, nome) values (3, 'BB. Máquinas');
+
+select * from municipio
+insert into transportadora (idtransportadora, idmunicipio, nome, logradouro, numero)
+values (1, 9, 'BS. Transportes', 'Rua das Limas', '01');
+insert into transportadora (idtransportadora, idmunicipio, nome)
+values (2, 5, 'União Transportes');
+
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (1, 1, 'Microcomputador', 800);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (2, 1, 'Monitor', 500);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (3, 2, 'Placa Mãe', 200);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (4, 2, 'HD', 150);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (5, 2, 'Placa de vídeo', 200);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (6, 3, 'Memória RAM', 100);
+insert into produto (idproduto, idfornecedor, nome, valor)
+values (7, 1, 'Gabinete', 35);
+
+-- =====================================================
+-- CREATE TABLE	e INSERT
+-- =====================================================
+create table pedido (
+	idpedido integer not null,
+	idcliente integer not null,
+	idtransportadora integer,
+	idvendedor integer not null,
+	data_pedido date not null,
+	valor float not null,
+
+	constraint pk_pdd_idpedido primary key (idpedido),
+	constraint fk_pdd_idcliente foreign key (idcliente) references cliente (idcliente),
+	constraint fk_pdd_idtransportadora foreign key (idtransportadora) references transportadora(idtransportadora),
+	constraint fk_pdd_idvendedor foreign key (idvendedor) references vendedor (idvendedor)
+);
+
+select * from cliente
+select * from transportadora
+select * from vendedor
+
+update cliente set nome = 'Manoel' where idcliente = 1
+
+insert into pedido (idpedido, data_pedido, valor, idcliente, idtransportadora, idvendedor)
+values (1, '2008-04-01', 1300, 1, 1, 1);
+insert into pedido (idpedido, data_pedido, valor, idcliente, idtransportadora, idvendedor)
+values (2, '2008-04-01', 500, 1, 1, 1);
+insert into pedido (idpedido, data_pedido, valor, idcliente, idtransportadora, idvendedor)
+values (3, '2008-04-02', 300, 11, 2, 5);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (4, '2008-04-05', 1000, 8, 1, 7);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (5, '2008-04-06', 200, 9, 2, 6);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (6, '2008-04-06', 1985, 10, 1, 6);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (7, '2008-04-06', 800, 3, 1, 7);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (8, '2008-04-06', 175, 3, null, 7);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (9, '2008-04-07', 1300, 12, null, 8);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (10, '2008-04-10', 200, 6, 1, 8);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (11, '2008-04-15', 300, 15, 2, 1);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (12, '2008-04-20', 300, 15, 2, 5);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (13, '2008-04-20', 350, 9, 1, 7);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (14, '2008-04-23', 300, 2, 1, 5);
+Insert into pedido (idpedido, data_pedido, valor, idcliente,idtransportadora, idvendedor) values (15, '2008-04-25', 200, 11, null, 5);
+
+select * from pedido
+
+create table pedido_produto (
+	idpedido integer not null,
+	idproduto integer not null,
+	quantidade integer not null,
+	valor_unitario float not null,
+
+	constraint pk_pdp_idpedidoproduto primary key (idpedido, idproduto),
+	constraint fk_pdp_idpedido foreign key (idpedido) references pedido (idpedido),
+	constraint fk_pdp_idproduto foreign key (idproduto) references produto (idproduto)
+);
+
+select * from produto
+select * from pedido_produto
+
+insert into pedido_produto (idpedido, idproduto, quantidade, valor_unitario) values
+(1, 1, 1, 800);
+insert into pedido_produto (idpedido, idproduto, quantidade, valor_unitario) values
+(1, 2, 1, 500);
+insert into pedido_produto (idpedido, idproduto, quantidade, valor_unitario) values
+(2, 2, 1, 500);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (3, 4, 2, 150);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (4, 1, 1, 800);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (4, 3, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (5, 3, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (6, 1, 2, 800);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (6, 7, 1, 35);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (6, 5, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (6, 4, 1, 150);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (7, 1, 1, 800);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (8, 7, 5, 35);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (9, 1, 1, 800);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (9, 2, 1, 500);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (10, 5, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (11, 5, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (11, 6, 1, 100);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (12, 2, 1, 500);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (13, 3, 1, 200);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (13, 4, 1, 150);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (14, 6, 3, 100);
+Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (15, 3, 1, 200);
