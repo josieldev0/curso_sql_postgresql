@@ -77,3 +77,28 @@ create table municipio(
 	constraint un_mnc_nome unique (nome),
 	constraint fk_mnc_iduf foreign key (iduf) references uf (iduf)
 );
+
+create table pedido (
+	idpedido integer not null,
+	idcliente integer not null,
+	idtransportadora integer,
+	idvendedor integer not null,
+	data_pedido date not null,
+	valor float not null,
+
+	constraint pk_pdd_idpedido primary key (idpedido),
+	constraint fk_pdd_idcliente foreign key (idcliente) references cliente (idcliente),
+	constraint fk_pdd_idtransportadora foreign key (idtransportadora) references transportadora(idtransportadora),
+	constraint fk_pdd_idvendedor foreign key (idvendedor) references vendedor (idvendedor)
+);
+
+create table pedido_produto (
+	idpedido integer not null,
+	idproduto integer not null,
+	quantidade integer not null,
+	valor_unitario float not null,
+
+	constraint pk_pdp_idpedidoproduto primary key (idpedido, idproduto),
+	constraint fk_pdp_idpedido foreign key (idpedido) references pedido (idpedido),
+	constraint fk_pdp_idproduto foreign key (idproduto) references produto (idproduto)
+);
