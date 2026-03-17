@@ -1109,3 +1109,63 @@ select
 	end as faixa
 from 
 	produto
+
+-- =====================================================
+-- SUBCONSULTAS
+-- =====================================================
+-- Selecionar a data do pedido e o valor onde o valor seja maior que a média dos 
+-- valores de todos os pedidos
+select 
+	data_pedido,
+	valor
+from 
+	pedido
+where 
+	valor > (select avg(valor) from pedido)
+
+-- Exemplo com count
+select * from pedido_produto
+select
+	pedido.data_pedido,
+	pedido.valor,
+	(select sum(quantidade) from pedido_produto where pedido_produto.idpedido = pedido.idpedido) as quantidade
+from
+	pedido
+	
+-- Exemplo com update
+select * from pedido
+
+update pedido set valor = valor + ((valor * 5) / 100)
+where valor > (select avg(valor) from pedido)
+
+-- =====================================================
+-- EXERCÍCIOS SUBCONSULTAS
+-- =====================================================
+-- 1. O nome dos clientes que moram na mesma cidade do Manoel. Não deve ser mostrado o Manoel.
+select * from cliente
+select idmunicipio from cliente where nome = 'Manoel'
+
+select 
+	nome
+from 
+	cliente
+where
+	idmunicipio = 1 
+and 
+	nome <> 'Manoel'
+
+-- 2. A data e o valor dos pedidos que o valor do pedido seja menor que a média de todos os pedidos.
+
+-- 3. A data,o valor, o cliente e o vendedor dos pedidos que possuem 2 ou mais produtos.
+
+-- 4. O nome dos clientes que moram na mesma cidade da transportadora BSTransportes.
+
+-- 5. O nome do cliente e o município dos clientes que estão localizados no mesmo município de qualquer uma das transportadoras.
+
+-- 6. Atualizar o valor do pedido em 5% para os pedidos que o somatório do valor total dos produtos daquele pedido seja maior que a média do valor total
+
+-- de todos os produtos de todos os pedidos.
+
+-- 7. O nome do cliente e a quantidade de pedidos feitos pelo cliente.
+
+-- 8. Para revisar, refaça o exercício anterior (número 07) utilizando group by e mostrando somente os clientes que fizeram pelo menos um pedido.
