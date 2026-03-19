@@ -696,17 +696,89 @@ and
 	nome <> 'Manoel'
 
 -- 2. A data e o valor dos pedidos que o valor do pedido seja menor que a média de todos os pedidos.
+select
+	data_pedido,
+	valor
+from 
+	pedido
+where 
+	valor < (select avg(valor) from pedido)
 
 -- 3. A data,o valor, o cliente e o vendedor dos pedidos que possuem 2 ou mais produtos.
+select * from pedido
+select * from pedido_produto
 
+select 
+	pedido.data_pedido,
+	pedido.valor,
+	cliente.nome as cliente,
+	vendedor.nome as vendedor
+from 
+	pedido
+left outer join
+	cliente on pedido.idcliente = cliente.idcliente
+left outer join
+	vendedor on pedido.idvendedor = vendedor.idvendedor
+where
+	(select sum(quantidade) from pedido_produto where pedido_produto.idpedido = pedido.idpedido) >= 2
+	
 -- 4. O nome dos clientes que moram na mesma cidade da transportadora BSTransportes.
+select * from transportadora
+select * from cliente
 
+select 
+	nome
+from 
+	cliente
+where 	
+	(select idmunicipio from transportadora where cliente.idmunicipio = transportadora.idmunicipio) = 9
+	
 -- 5. O nome do cliente e o município dos clientes que estão localizados no mesmo município de qualquer uma das transportadoras.
+select * from transportadora
 
--- 6. Atualizar o valor do pedido em 5% para os pedidos que o somatório do valor total dos produtos daquele pedido seja maior que a média do valor total
+select
+	nome,
+	idmunicipio
+from 
+	cliente
+where 
+	idmunicipio in (select distinct(idmunicipio) from transportadora)
 
--- de todos os produtos de todos os pedidos.
+-- 6. Atualizar o valor do pedido em 5% para os pedidos que o somatório do valor total dos produtos daquele pedido seja
+
+-- maior que a média do valor total de todos os produtos de todos os pedidos.
+update 
+	pedido 
+set 
+	valor = valor + ((valor * 5) / 100)
+where 
+	(select sum(pdp.valor_unitario) from pedido_produto pdp where pdp.idpedido = pedido.idpedido) > (select avg(valor_unitario) from pedido_produto)
+
+-- select
+-- 	pdd.idpedido,
+-- 	(select sum(valor_unitario) from pedido_produto pdp where pdp.idpedido = pdd.idpedido)
+-- from 
+-- 	pedido pdd
+-- select avg(valor_unitario) from pedido_produto
+-- select * from pedido_produto
+-- select * from pedido
 
 -- 7. O nome do cliente e a quantidade de pedidos feitos pelo cliente.
+select * from pedido_produto
+
+select 
+	cliente.nome,
+	(select count(idpedido) from pedido where pedido.idcliente = cliente.idcliente)
+from 
+	cliente
 
 -- 8. Para revisar, refaça o exercício anterior (número 07) utilizando group by e mostrando somente os clientes que fizeram pelo menos um pedido.
+select 
+	cliente.nome as cliente,
+	count(pedido.idpedido) as total
+from 
+	pedido
+left outer join
+	cliente on pedido.idcliente = cliente.idcliente
+group by
+	cliente.nome
