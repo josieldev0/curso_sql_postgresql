@@ -1242,3 +1242,136 @@ left outer join
 	cliente on pedido.idcliente = cliente.idcliente
 group by
 	cliente.nome
+
+-- =====================================================
+-- VIEWS
+-- =====================================================
+create view cliente_profissao as 
+select 
+	cliente.nome as cliente,
+	cliente.cpf as cpf,
+	profissao.nome as profissao
+from 
+	cliente
+left outer join
+	profissao on cliente.idprofissao = profissao.idprofissao
+
+select cliente, profissao from cliente_profissao where profissao = 'Professor'
+
+-- =====================================================
+-- EXERCÍCIOS VIEWS
+-- =====================================================
+-- 1. O nome, a profissão, a nacionalidade, o complemento, o município, a unidade de federação, 
+-- o bairro, o CPF,o RG, a data de nascimento, o gênero (mostrar “Masculino” ou “Feminino”), 
+-- o logradouro, o número e as observações dos clientes.
+create view cliente_dados as
+select
+	cliente.nome as cliente,
+	profissao.nome as profissao,
+	nacionalidade.nome as nacionalidade,
+	complemento.nome as complemento,
+	municipio.nome as municipio,
+	uf.nome as unidade_federao,
+	uf.sigla,
+	bairro.nome as bairro,
+	cliente.cpf,
+	cliente.rg,
+	cliente.data_nascimento,
+	case cliente.genero
+		when 'M' then 'Masculino'
+		when 'F' then 'Feminino'
+	end as genero,
+	cliente.logradouro,
+	cliente.numero,
+	cliente.observacoes
+from 
+	cliente
+left outer join
+	profissao on cliente.idprofissao = profissao.idprofissao
+left outer join
+	nacionalidade on cliente.idnacionalidade = nacionalidade.idnacionalidade
+left outer join
+	complemento on cliente.idcomplemento = complemento.idcomplemento
+left outer join
+	municipio on cliente.idmunicipio = municipio.idmunicipio
+left outer join
+	uf on municipio.iduf = uf.iduf
+left outer join
+	bairro on cliente.idbairro = bairro.idbairro
+	
+select * from cliente_dados
+	
+-- 2. O nome do município e o nome e a sigla da unidade da federação.
+create view municipio_uf as 
+select 	
+	municipio.nome as municipio,
+	uf.nome as unidade_federacao,
+	uf.sigla
+from
+	municipio
+left outer join
+	uf on municipio.iduf = uf.iduf
+
+select * from municipio_uf
+
+-- 3. O nome do produto, o valor e o nome do fornecedor dos produtos.
+create view produto_fornecedor as
+select
+	produto.nome as produto,
+	produto.valor,
+	fornecedor.nome as fornecedor
+from 
+	produto
+left outer join 
+	fornecedor on produto.idfornecedor = fornecedor.idfornecedor
+
+select * from produto_fornecedor
+
+-- 4. O nome da transportadora, o logradouro, o número, o nome da unidade de federação e a sigla da unidade de federação das transportadoras.
+create view transportadora_uf as 
+select
+	transportadora.nome as transportadora,
+	transportadora.logradouro,
+	transportadora.numero,
+	uf.nome as unidade_federativa,
+	uf.sigla
+from 
+	transportadora
+left outer join
+	municipio on transportadora.idmunicipio = municipio.idmunicipio
+left outer join
+	uf on municipio.iduf = uf.iduf
+
+select * from transportadora_uf where sigla = 'PR'
+
+-- 5. A data do pedido, o valor, o nome da transportadora, o nome do cliente e o nome do vendedor dos pedidos.
+create view dados_pedido as
+select 
+	pedido.data_pedido,
+	pedido.valor,
+	transportadora.nome as transportadora,
+	cliente.nome as cliente,
+	vendedor.nome as vendedor
+from 
+	pedido
+left outer join
+	transportadora on pedido.idtransportadora = transportadora.idtransportadora
+left outer join
+	cliente on pedido.idcliente = cliente.idcliente
+left outer join
+	vendedor on pedido.idvendedor = vendedor.idvendedor
+
+select * from dados_pedido
+
+-- 6. O nome do produto, a quantidade, o valor unitário e o valor total dos produtos do pedido.
+create view produto_pedido as
+select
+	produto.nome as produto,
+	pedido.produto.quantidade,
+	pedido.produto.valor_unitario
+from
+	pedido_produto
+left outer join
+	produto on pedido_produto.idproduto = produto.idproduto
+
+select * from produto_pedido
