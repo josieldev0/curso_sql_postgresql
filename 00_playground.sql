@@ -1524,3 +1524,47 @@ alter sequence vendedor_id_seq owned by vendedor.idvendedor
 
 insert into vendedor (nome) values ('Teste sequência')
 select * from vendedor
+
+
+-- l. produto
+select max(idproduto) from produto
+
+create sequence produto_id_seq minvalue 8
+alter table produto alter idproduto set default nextval('produto_id_seq')
+alter sequence produto_id_seq owned by produto.idproduto
+
+-- =====================================================
+-- CAMPOS DEFAULT
+-- =====================================================
+alter table pedido alter column data_pedido set default current_date;
+alter table pedido alter column valor set default 0;
+
+insert into pedido (idcliente, idvendedor) values(1, 1)
+
+insert into pedido (idcliente, idvendedor, data_pedido, valor)
+values (1, 1, '2022-10-10', 234)
+
+select * from pedido
+
+-- =====================================================
+-- EXERCÍCIOS CAMPOS DEFAULT
+-- =====================================================
+-- 1. Adicione valores default na tabela de produtos do pedido
+
+-- a. Quantidade com o valor 1
+alter table pedido_produto alter column quantidade set default 1;
+
+-- b. Valor unitário com o valor 0
+alter table pedido_produto alter column valor_unitario set default 0;
+
+insert into pedido_produto (idpedido, idproduto) values (1, 3)
+select * from pedido_produto
+
+
+-- 2. Adicione valor default na tabela de produtos
+
+-- a. Valor com o valor 0
+alter table produto alter column valor set default 0;
+
+insert into produto (nome, idfornecedor) values ('Teste default 1', 1)
+select * from produto
