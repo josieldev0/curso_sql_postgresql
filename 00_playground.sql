@@ -1568,3 +1568,19 @@ alter table produto alter column valor set default 0;
 
 insert into produto (nome, idfornecedor) values ('Teste default 1', 1)
 select * from produto
+
+-- =====================================================
+-- ÍNDICES
+-- =====================================================
+create index idx_cliente_nome on cliente (nome);
+
+-- =====================================================
+-- EXERCÍCIOS ÍNDICES
+-- =====================================================
+-- 1. Adicione índices nas seguintes tabelas e campos
+
+-- a. Pedido – data do pedido
+create index idx_pedido_data_pedido on pedido (data_pedido);
+
+-- b. Produto – nome
+create index idx_produto_nome on produto (nome);
