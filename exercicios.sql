@@ -900,3 +900,122 @@ left outer join
 	produto on pedido_produto.idproduto = produto.idproduto
 
 select * from produto_pedido
+
+-- =====================================================
+-- EXERCÍCIOS CAMPOS AUTOINCREMENTO
+-- =====================================================
+-- 1. Criar sequências para todas as outras tabelas da base de dados
+
+-- a. Cliente
+select max(idcliente) from cliente
+
+create sequence cliente_id_seq minvalue 18
+alter table cliente alter idcliente set default nextval('cliente_id_seq')
+alter sequence cliente_id_seq owned by cliente.idcliente
+
+insert into cliente (nome) values ('Teste sequência')
+select * from cliente
+
+
+-- b. Complemento
+select max(idcomplemento) from complemento
+
+create sequence complemento_id_seq minvalue 3
+alter table complemento alter idcomplemento set default nextval('complemento_id_seq')
+alter sequence complemento_id_seq owned by complemento.idcomplemento
+
+insert into complemento (nome) values ('Teste sequência')
+select * from complemento
+
+
+-- c. Fornecedor
+select max(idfornecedor) from fornecedor
+
+create sequence fornecedor_id_seq minvalue 4
+alter table fornecedor alter idfornecedor set default nextval('fornecedor_id_seq')
+alter sequence fornecedor_id_seq owned by fornecedor.idfornecedor
+
+insert into fornecedor (nome) values ('Teste sequência')
+select * from fornecedor
+
+
+-- d. Município
+select max(idmunicipio) from municipio
+
+create sequence municipio_id_seq minvalue 10
+alter table municipio alter idmunicipio set default nextval('municipio_id_seq')
+alter sequence municipio_id_seq owned by municipio.idmunicipio
+
+insert into municipio (nome, iduf) values ('Teste sequência', 1)
+select * from municipio
+
+
+-- e. Nacionalidade
+select max(idnacionalidade) from nacionalidade
+
+create sequence nacionalidade_id_seq minvalue 5
+alter table nacionalidade alter idnacionalidade set default nextval('nacionalidade_id_seq')
+alter sequence nacionalidade_id_seq owned by nacionalidade.idnacionalidade
+
+insert into nacionalidade (nome) values ('Teste sequência')
+select * from nacionalidade
+
+
+-- f. Pedido
+select max(idpedido) from pedido
+
+create sequence pedido_id_seq minvalue 16
+alter table pedido alter idpedido set default nextval('pedido_id_seq')
+alter sequence pedido_id_seq owned by pedido.idpedido
+
+insert into pedido (data_pedido, valor, idcliente, idvendedor)
+values (current_date, 130, 1, 1)
+select * from pedido
+
+
+-- g. Pedido produto (verificar se é necessário)
+select * from pedido_produto
+
+
+-- h. Profissão
+select max(idprofissao) from profissao
+
+create sequence profissao_id_seq minvalue 6
+alter table profissao alter idprofissao set default nextval('profissao_id_seq')
+alter sequence profissao_id_seq owned by profissao.idprofissao
+
+insert into profissao (nome) values ('Teste sequência')
+select * from profissao
+
+
+-- i. Transportadora
+select max(idtransportadora) from transportadora
+
+create sequence transportadora_id_seq minvalue 3
+alter table transportadora alter idtransportadora set default nextval('transportadora_id_seq')
+alter sequence transportadora_id_seq owned by transportadora.idtransportadora
+
+insert into transportadora (nome) values ('Teste sequência')
+select * from transportadora
+
+
+-- j. UF
+select max(iduf) from uf
+
+create sequence uf_id_seq minvalue 7
+alter table uf alter iduf set default nextval('uf_id_seq')
+alter sequence uf_id_seq owned by uf.iduf
+
+insert into uf (nome, sigla) values ('Teste sequência', 'TE')
+select * from uf
+
+
+-- k. Vendedor
+select max(idvendedor) from vendedor
+
+create sequence vendedor_id_seq minvalue 9
+alter table vendedor alter idvendedor set default nextval('vendedor_id_seq')
+alter sequence vendedor_id_seq owned by vendedor.idvendedor
+
+insert into vendedor (nome) values ('Teste sequência')
+select * from vendedor
