@@ -23,9 +23,6 @@ create table cliente (
 	 
 );
 
--- =====================================================
--- CREATE TABLE
--- =====================================================
 create table profissao (
 	idprofissao integer not null,
 	nome varchar(30) not null,
@@ -101,4 +98,76 @@ create table pedido_produto (
 	constraint pk_pdp_idpedidoproduto primary key (idpedido, idproduto),
 	constraint fk_pdp_idpedido foreign key (idpedido) references pedido (idpedido),
 	constraint fk_pdp_idproduto foreign key (idproduto) references produto (idproduto)
+);
+
+create table editora (
+	ideditora serial not null,
+	nome varchar(30) not null,
+
+	constraint pk_editora_ideditora primary key (ideditora),
+	constraint un_editora_nome unique (nome)
+);
+
+create table categoria (
+	idcategoria serial not null,
+	nome varchar(30) not null,
+
+	constraint pk_categoria_idcategoria primary key (idcategoria),
+	constraint un_categoria_nome unique (nome)
+);
+
+create table autor (
+	idautor serial not null,
+	nome varchar(30) not null,
+
+	constraint pk_autor_idautor primary key (idautor)
+);
+
+create table livro(
+	idlivro serial not null,
+	ideditora integer not null,
+	idcategoria integer not null,
+	nome varchar(60) not null,
+
+	constraint pk_livro_idlivro primary key (idlivro),
+	constraint fk_livro_ideditora foreign key (ideditora) references editora (ideditora),
+	constraint fk_livro_idcategoria foreign key (idcategoria) references categoria (idcategoria),
+	constraint un_livro_nome unique (idlivro)
+);
+
+create table livro_autor (
+	idlivro integer not null,
+	idautor integer not null,
+
+	constraint pk_livroautor_idlivroautor primary key (idlivro, idautor),
+	constraint fk_livroautor_idlivro foreign key (idlivro) references livro (idlivro),
+	constraint fk_livroautor_idautor foreign key (idautor) references autor (idautor)
+);
+
+create table aluno (
+	idaluno serial not null,
+	nome varchar(50) not null,
+
+	constraint pk_aluno_idaluno primary key(idaluno)
+);
+
+create table emprestimo (
+	idemprestimo serial not null,
+	idaluno integer not null,
+	data_emprestimo date not null default current_date,
+	data_devolucao date not null,
+	valor float not null default 0,
+	devolvido char(1) not null,
+
+	constraint pk_emprestimo_idemprestimo primary key (idemprestimo),
+	constraint fk_emprestimo_idaluno foreign key (idaluno) references aluno (idaluno)
+);
+
+create table emprestimo_livro(
+	idemprestimo integer not null,
+	idlivro integer not null,
+
+	constraint pk_emprestimolivro_idemprestimolivro primary key (idemprestimo, idlivro),
+	constraint fk_emprestimolivro_idemprestimo foreign key (idemprestimo) references emprestimo (idemprestimo),
+	constraint fk_emprestimolivro_idlivro foreign key (idlivro) references livro (idlivro)
 );

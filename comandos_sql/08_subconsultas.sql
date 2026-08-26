@@ -25,3 +25,32 @@ select * from pedido
 
 update pedido set valor = valor + ((valor * 5) / 100)
 where valor > (select avg(valor) from pedido)
+
+select 
+	data_emprestimo,
+	valor
+from 
+	emprestimo
+where 
+	valor > (select avg(valor) from emprestimo)
+
+select
+	data_emprestimo,
+	valor, 
+from 
+	emprestimo 
+where 
+	(select 
+		count(idemprestimo) 
+	from 
+		emprestimo_livro 
+	where 
+		emprestimo_livro.idemprestimo = emprestimo.idemprestimo) > 1
+		
+select 
+	data_emprestimo,
+	valor
+from 
+	emprestimo
+where 
+	valor < (select sum(valor) from emprestimo)

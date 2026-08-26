@@ -130,3 +130,69 @@ Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values
 Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (13, 4, 1, 150);
 Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (14, 6, 3, 100);
 Insert into pedido_produto (idpedido,idproduto,quantidade,valor_unitario) values (15, 3, 1, 200);
+
+insert into editora (nome) values ('Bookman');
+insert into editora (nome) values ('Edgard Blusher');
+insert into editora (nome) values ('Nova Terra');
+insert into editora (nome) values ('Brasport');
+
+insert into categoria (nome) values('Banco de Dados');
+insert into categoria (nome) values('HTML');
+insert into categoria (nome) values('Java');
+insert into categoria (nome) values('PHP');
+
+insert into autor (nome) values ('Waldemar Setzer');
+insert into autor (nome) values ('Flávio Soares');
+insert into autor (nome) values ('John Watson');
+insert into autor (nome) values ('Rui Rossi dos Santos');
+insert into autor (nome) values ('Antônio Pereira de Resende');
+insert into autor (nome) values ('Claudiney Calixto Lima');
+insert into autor (nome) values ('Evandro Carlos Teruel');
+insert into autor (nome) values ('Ian Graham');
+insert into autor (nome) values ('Fabrício Xavier');
+insert into autor (nome) values ('Pablo Dalloglio');
+
+insert into livro(ideditora, idcategoria, nome) values (2, 1, 'Banco de Dados - 1 Edição');
+insert into livro(ideditora, idcategoria, nome) values (1, 1, 'Oracle DataBase 11G Administração');
+insert into livro(ideditora, idcategoria, nome) values (3, 3, 'Programação de Computadores em Java');
+insert into livro(ideditora, idcategoria, nome) values (4, 3, 'Programação Orientada a Aspectos em Java');
+insert into livro(ideditora, idcategoria, nome) values (4, 2, 'HTML5 - Guia Prático');
+insert into livro(ideditora, idcategoria, nome) values (3, 2, 'HTML - Guia de Referência para Desenvolvimento na Web');
+insert into livro(ideditora, idcategoria, nome) values (1, 4, 'PHP para Desenvolvimento Profissional');
+insert into livro(ideditora, idcategoria, nome) values (2, 4, 'PHP com Programação Orientada a Objetos');
+
+insert into livro_autor (idlivro, idautor) values (1, 1);
+insert into livro_autor (idlivro, idautor) values (1, 2);
+insert into livro_autor (idlivro, idautor) values (2, 3);
+insert into livro_autor (idlivro, idautor) values (3, 4);
+insert into livro_autor (idlivro, idautor) values (4, 5);
+insert into livro_autor (idlivro, idautor) values (4, 6);
+insert into livro_autor (idlivro, idautor) values (5, 7);
+insert into livro_autor (idlivro, idautor) values (6, 8);
+insert into livro_autor (idlivro, idautor) values (7, 9);
+insert into livro_autor (idlivro, idautor) values (8, 10);
+
+insert into aluno (nome) values ('Mario');
+insert into aluno (nome) values ('João');
+insert into aluno (nome) values ('Paulo');
+insert into aluno (nome) values ('Pedro');
+insert into aluno (nome) values ('Maria');
+
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (1, '2012-05-02', '2012-05-12', 10, 'S');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (1, '2012-04-23', '2012-05-03', 5, 'N');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (2, '2012-05-10', '2012-05-20', 12, 'N');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (3, '2012-05-10', '2012-05-20', 8, 'S');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (4, '2012-05-05', '2012-05-15', 15, 'N');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (4, '2012-05-07', '2012-05-17', 20, 'S');
+insert into emprestimo(idaluno, data_emprestimo, data_devolucao, valor, devolvido) values (4, '2012-05-08', '2012-05-18', 5, 'S');
+
+insert into emprestimo_livro (idemprestimo, idlivro) values (1, 1);
+insert into emprestimo_livro (idemprestimo, idlivro) values (2, 4);
+insert into emprestimo_livro (idemprestimo, idlivro) values (2, 3);
+insert into emprestimo_livro (idemprestimo, idlivro) values (3, 2);
+insert into emprestimo_livro (idemprestimo, idlivro) values (3, 7);
+insert into emprestimo_livro (idemprestimo, idlivro) values (4, 5);
+insert into emprestimo_livro (idemprestimo, idlivro) values (5, 4);
+insert into emprestimo_livro (idemprestimo, idlivro) values (6, 6);
+insert into emprestimo_livro (idemprestimo, idlivro) values (6, 1);
+insert into emprestimo_livro (idemprestimo, idlivro) values (7, 8);
