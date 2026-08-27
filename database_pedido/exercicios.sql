@@ -1061,3 +1061,24 @@ create index idx_pedido_data_pedido on pedido (data_pedido);
 
 -- b. Produto – nome
 create index idx_produto_nome on produto (nome);
+
+-- =====================================================
+-- EXERCÍCIOS FUNCTION
+-- =====================================================
+-- Crie uma função que receba como parâmetro o ID do pedido e retorne o valor total deste pedido
+create function get_valor_pedido(f_idpedido integer) returns varchar(30) language plpgsql as 
+$$
+begin
+	return (select formata_moeda(valor) from pedido where idpedido = f_idpedido);
+end;
+$$;
+select get_valor_pedido(idpedido) from pedido;
+
+-- Crie uma função chamada “maior”, que quando executada retorne o pedido com o maior valor
+create function get_maior_pedido() returns integer language plpgsql as 
+$$
+begin
+	return (select idpedido from pedido where valor = (select max(valor) from pedido));
+end;
+$$;
+select get_maior_pedido()
