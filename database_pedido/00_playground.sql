@@ -1584,3 +1584,46 @@ create index idx_pedido_data_pedido on pedido (data_pedido);
 
 -- b. Produto – nome
 create index idx_produto_nome on produto (nome);
+
+-- =====================================================
+-- FUNÇÕES	
+-- =====================================================
+create function formata_moeda(valor float) returns varchar(30)  language plpgsql as
+$$
+begin
+	return concat('R$ ', round(cast(valor as numeric), 2));
+end;
+$$;
+select valor, formata_moeda(valor) from pedido;
+select valor, formata_moeda(valor) from produto;
+
+create function get_nome_by_id (idcliente integer) returns varchar(50) language plpgsql as
+$$
+declare r varchar(50);
+begin
+	select nome into r from cliente where idcliente = idcliente;
+	return r;
+end;
+$$;
+select data_pedido, valor, get_nome_by_id(idcliente) from pedido;
+
+-- =====================================================
+-- EXERCÍCIOS FUNCTION
+-- =====================================================
+-- Crie uma função que receba como parâmetro o ID do pedido e retorne o valor total deste pedido
+create function get_valor_pedido(f_idpedido integer) returns varchar(30) language plpgsql as 
+$$
+begin
+	return (select formata_moeda(valor) from pedido where idpedido = f_idpedido);
+end;
+$$;
+select get_valor_pedido(idpedido) from pedido;
+
+-- Crie uma função chamada “maior”, que quando executada retorne o pedido com o maior valor
+create function get_maior_pedido() returns integer language plpgsql as 
+$$
+begin
+	return (select idpedido from pedido where valor = (select max(valor) from pedido));
+end;
+$$;
+select get_maior_pedido()
