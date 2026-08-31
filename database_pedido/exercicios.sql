@@ -1082,3 +1082,54 @@ begin
 end;
 $$;
 select get_maior_pedido()
+
+-- =====================================================
+-- EXERCÍCIOS PROCEDURES
+-- =====================================================
+-- 1. Crie uma stored procedure que receba como parâmetro o ID do produto e o percentual de aumento,
+-- e reajuste o preço somente deste produto de acordo com o valor passado como parâmetro
+create procedure reajusta_produto(id_produto integer, percentual float) language sql as
+$$
+	update produto set valor = valor + ((valor * percentual) / 100) where id_produto = idproduto;
+$$;
+call reajusta_produto(1, 10);
+
+-- 2. Crie uma stored procedure que receba como parâmetro o ID do produto e exclua da base de dados
+-- somente o produto com o ID correspondente
+create procedure apaga_produto(id_produto integer) language sql as
+$$
+	delete from produto where idproduto = id_produto; 
+$$;
+call apaga_produto(8);
+
+-- =====================================================
+-- EXERCÍCIOS TRIGGERS	
+-- =====================================================
+-- 1. Crie uma tabela chamada PEDIDOS_APAGADOS
+create table pedidos_apagados(
+	idpedido integer not null,
+	idcliente integer not null,
+	idtransportadora integer,
+	idvendedor integer not null,
+	data_pedido date not null,
+	valor float not null,
+	data_apagado date not null
+)
+
+-- 2. Faça uma trigger que quando um pedido for apagado, todos os seus dados devem ser copiados para
+-- a tabela PEDIDOS_APAGADOS
+create or replace function pedido_log() returns trigger language plpgsql as 
+$$
+begin
+	insert into pedidos_apagados(idpedido, idcliente, idtransportadora, idvendedor, data_pedido, valor, data_apagado)
+	values(old.idpedido, old.idcliente, old.idtransportadora, old.idvendedor, old.data_pedido, old.valor, current_timestamp);
+	return old;
+end;
+$$;
+create trigger log_pedido_trigger before delete on pedido for each row execute procedure pedido_log();
+
+select * from pedido;
+select idpedido from pedido where idpedido not in (select idpedido from pedido_produto);
+
+delete from pedido where idpedido in (16, 17 ,18);
+select * from pedidos_apagados;
