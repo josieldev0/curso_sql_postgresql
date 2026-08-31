@@ -1597,11 +1597,11 @@ $$;
 select valor, formata_moeda(valor) from pedido;
 select valor, formata_moeda(valor) from produto;
 
-create function get_nome_by_id (idcliente integer) returns varchar(50) language plpgsql as
+create function get_nome_by_id (id_cliente integer) returns varchar(50) language plpgsql as
 $$
 declare r varchar(50);
 begin
-	select nome into r from cliente where idcliente = idcliente;
+	select nome into r from cliente where idcliente = id_cliente;
 	return r;
 end;
 $$;
@@ -1611,10 +1611,10 @@ select data_pedido, valor, get_nome_by_id(idcliente) from pedido;
 -- EXERCÍCIOS FUNCTION
 -- =====================================================
 -- Crie uma função que receba como parâmetro o ID do pedido e retorne o valor total deste pedido
-create function get_valor_pedido(f_idpedido integer) returns varchar(30) language plpgsql as 
+create function get_valor_pedido(id_pedido integer) returns varchar(30) language plpgsql as 
 $$
 begin
-	return (select formata_moeda(valor) from pedido where idpedido = f_idpedido);
+	return (select formata_moeda(valor) from pedido where idpedido = id_pedido);
 end;
 $$;
 select get_valor_pedido(idpedido) from pedido;
@@ -1626,4 +1626,88 @@ begin
 	return (select idpedido from pedido where valor = (select max(valor) from pedido));
 end;
 $$;
-select get_maior_pedido()
+select get_maior_pedido();
+
+-- =====================================================
+-- STORED PROCEDURES 	
+-- =====================================================
+create procedure insere_bairro(nome_bairro varchar(40)) language sql as 
+$$
+	insert into bairro (nome) values (nome_bairro);
+$$;
+
+call insere_bairro('Teste Procedure');
+select * from bairro;
+
+-- =====================================================
+-- EXERCÍCIOS PROCEDURES
+-- =====================================================
+-- 1. Crie uma stored procedure que receba como parâmetro o ID do produto e o percentual de aumento,
+-- e reajuste o preço somente deste produto de acordo com o valor passado como parâmetro
+create procedure reajusta_produto(id_produto integer, percentual float) language sql as
+$$
+	update produto set valor = valor + ((valor * percentual) / 100) where id_produto = idproduto;
+$$;
+call reajusta_produto(1, 10);
+
+-- 2. Crie uma stored procedure que receba como parâmetro o ID do produto e exclua da base de dados
+-- somente o produto com o ID correspondente
+create procedure apaga_produto(id_produto integer) language sql as
+$$
+	delete from produto where idproduto = id_produto; 
+$$;
+call apaga_produto(8);
+
+-- =====================================================
+-- TRIGGERS	
+-- =====================================================
+create table bairro_auditoria(
+	idbairro integer not null,
+	data_criacao timestamp not null
+)
+
+create function bairro_log() returns trigger language plpgsql as 
+$$
+begin
+	insert into bairro_auditoria(idbairro, data_criacao) values(new.idbairro, current_timestamp);
+	return new;
+end;
+$$;
+create trigger log_bairro_trigger after insert on bairro for each row execute function bairro_log();
+
+call insere_bairro('Teste 10');
+call insere_bairro('Teste 20');
+call insere_bairro('Teste 30');
+select * from bairro_auditoria;
+
+-- =====================================================
+-- EXERCÍCIOS TRIGGERS	
+-- =====================================================
+-- 1. Crie uma tabela chamada PEDIDOS_APAGADOS
+create table pedidos_apagados(
+	idpedido integer not null,
+	idcliente integer not null,
+	idtransportadora integer,
+	idvendedor integer not null,
+	data_pedido date not null,
+	valor float not null,
+	data_apagado date not null
+)
+
+-- 2. Faça uma trigger que quando um pedido for apagado, todos os seus dados devem ser copiados para
+-- a tabela PEDIDOS_APAGADOS
+create or replace function pedido_log() returns trigger language plpgsql as 
+$$
+begin
+	insert into pedidos_apagados(idpedido, idcliente, idtransportadora, idvendedor, data_pedido, valor, data_apagado)
+	values(old.idpedido, old.idcliente, old.idtransportadora, old.idvendedor, old.data_pedido, old.valor, current_timestamp);
+	return old;
+end;
+$$;
+create trigger log_pedido_trigger before delete on pedido for each row execute procedure pedido_log();
+
+select * from pedido;
+select idpedido from pedido where idpedido not in (select idpedido from pedido_produto);
+
+delete from pedido where idpedido in (16, 17 ,18);
+select * from pedidos_apagados;
