@@ -1642,6 +1642,7 @@ select * from bairro;
 -- =====================================================
 -- EXERCÍCIOS PROCEDURES
 -- =====================================================
+
 -- 1. Crie uma stored procedure que receba como parâmetro o ID do produto e o percentual de aumento,
 -- e reajuste o preço somente deste produto de acordo com o valor passado como parâmetro
 create procedure reajusta_produto(id_produto integer, percentual float) language sql as
@@ -1711,3 +1712,107 @@ select idpedido from pedido where idpedido not in (select idpedido from pedido_p
 
 delete from pedido where idpedido in (16, 17 ,18);
 select * from pedidos_apagados;
+
+-- =====================================================
+-- DOMÍNIOS	
+-- =====================================================
+-- Ids
+create domain idcurto as smallint;
+create domain idmedio as integer;
+create domain idlongo as bigint;
+
+-- Caracteres
+create domain sigla as char(3);
+create domain codigo as varchar(10);
+create domain nome_curto as varchar(15);
+create domain nome_medio as varchar(50);
+create domain nome_longo as varchar(70);
+create domain documento as varchar(15);
+create domain tipo as char(1);
+create domain texto as text;
+
+-- Data e Hora
+create domain data as date;
+create domain hora as time;
+create domain data_hora as timestamp;
+
+-- Numéricos
+create domain moeda as numeric(10,2);
+create domain float_curto as numeric(6,2);
+create domain float_medio as numeric(10,2);
+create domain float_longo as numeric(15,2);
+create domain quantidade as smallint;
+
+-- =====================================================
+-- USUÁRIOS E PERMISSÕES	
+-- =====================================================
+create role gerente;
+create role estagiario;
+
+grant select, insert, delete, update on bairro, cliente, complemento, fornecedor, municipio, nacionalidade, pedido, pedido_produto, produto, profissao, transportadora, uf, vendedor to gerente with grant option;
+grant all on all sequences in schema public to gerente;
+-- revoke - Retirar as permissões
+
+grant select on cliente_dados, dados_pedido to estagiario;
+
+create role maria login password '123' in role gerente;
+create role pedro login password '123' in role estagiario;
+
+-- =====================================================
+-- EXERCÍCIOS USUÁRIOS E PERMISSÕES	
+-- =====================================================
+-- 1. Crie um novo papel chamado “atendente”
+create role atendente;
+
+-- 2. Defina somente permissões para o novo papel poder selecionar e incluir novos pedidos (tabelas pedido e pedido_produto). O restante do acesso deve estar bloqueado
+grant select, insert on pedido, pedido_produto to atendente with grant option;
+grant all on pedido_id_seq to atendente with grant option;
+
+-- 3. Crie um novo usuário associado ao novo papel
+create role joao login password '123' in role atendente;
+
+-- =====================================================
+-- TRANSAÇÕES	
+-- =====================================================
+create table conta (
+	idconta serial not null,
+	cliente nome_medio not null,
+	saldo moeda not null default 0,
+	
+	constraint pk_cnt_idconta primary key (idconta)
+)
+
+insert into conta (cliente, saldo) values ('Cliente 1', 1000);
+insert into conta (cliente, saldo) values ('Cliente 2', 500);
+
+select * from conta
+
+update conta set saldo = saldo - 100 where idconta = 1;
+update conta set saldo = saldo + 100 where idconta = 2;
+
+begin;
+update conta set saldo = saldo - 100 where idconta = 1;
+update conta set saldo = saldo + 100 where idconta = 2;
+rollback;
+
+begin;
+update conta set saldo = saldo - 100 where idconta = 1;
+update conta set saldo = saldo + 100 where idconta = 2;
+commit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
