@@ -1133,3 +1133,16 @@ select idpedido from pedido where idpedido not in (select idpedido from pedido_p
 
 delete from pedido where idpedido in (16, 17 ,18);
 select * from pedidos_apagados;
+
+-- =====================================================
+-- EXERCÍCIOS USUÁRIOS E PERMISSÕES	
+-- =====================================================
+-- 1. Crie um novo papel chamado “atendente”
+create role atendente;
+
+-- 2. Defina somente permissões para o novo papel poder selecionar e incluir novos pedidos (tabelas pedido e pedido_produto). O restante do acesso deve estar bloqueado
+grant select, insert on pedido, pedido_produto to atendente with grant option;
+grant all on pedido_id_seq to atendente with grant option;
+
+-- 3. Crie um novo usuário associado ao novo papel
+create role joao login password '123' in role atendente;
